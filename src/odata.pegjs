@@ -168,7 +168,7 @@ identifierPart              = a:[a-zA-Z] b:unreserved { return a + b; }
 identifier                  = 
                                 a:identifierPart list:("." i:identifier {return i;})? {
                                     if (list === "") list = [];
-                                    if (require('util').isArray(list[0])) {
+                                    if (list instanceof Array && list.length > 0) {
                                         list = list[0];
                                     }
                                     list.unshift(a);
@@ -192,7 +192,7 @@ expand                      =   "$expand=" list:expandList { return { "$expand":
 
 expandList                  =   i:identifierPath list:("," WSP? l:expandList {return l;})? {
                                     if (list === "") list = [];
-                                    if (require('util').isArray(list[0])) {
+                                    if (list instanceof Array && list.length > 0) {
                                         list = list[0];
                                     }
                                     list.unshift(i);
@@ -223,7 +223,7 @@ orderbyList                 = i:(id:identifier ord:(WSP ("asc"/"desc"))? {
                               list:("," WSP? l:orderbyList{return l;})? {
 
                                     if (list === "") list = [];
-                                    if (require('util').isArray(list[0])) {
+                                    if (list instanceof Array && list.length > 0) {
                                         list = list[0];
                                     }
                                     list.unshift(i);
@@ -236,7 +236,7 @@ select                      =   "$select=" list:selectList { return { "$select":
 
 identifierPathParts         =   "/" i:identifierPart list:identifierPathParts? {
                                     if (list === "") list = [];
-                                    if (require('util').isArray(list[0])) {
+                                    if (list instanceof Array && list.length > 0) {
                                         list = list[0];
                                     }
                                     list.unshift("/" + i);
@@ -246,7 +246,7 @@ identifierPath              =   a:identifier b:identifierPathParts? { return a +
 selectList                  =   
                                 i:(a:identifierPath b:".*"?{return a + b;}/"*") list:("," WSP? l:selectList {return l;})? {
                                     if (list === "") list = [];
-                                    if (require('util').isArray(list[0])) {
+                                    if (list instanceof Array && list.length > 0) {
                                         list = list[0];
                                     }
                                     list.unshift(i);
